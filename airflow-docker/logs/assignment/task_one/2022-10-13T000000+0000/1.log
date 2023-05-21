@@ -1,0 +1,72 @@
+[2022-10-15 12:40:45,084] {taskinstance.py:896} INFO - Dependencies all met for <TaskInstance: assignment.task_one 2022-10-13T00:00:00+00:00 [queued]>
+[2022-10-15 12:40:45,114] {taskinstance.py:896} INFO - Dependencies all met for <TaskInstance: assignment.task_one 2022-10-13T00:00:00+00:00 [queued]>
+[2022-10-15 12:40:45,115] {taskinstance.py:1087} INFO - 
+--------------------------------------------------------------------------------
+[2022-10-15 12:40:45,116] {taskinstance.py:1088} INFO - Starting attempt 1 of 1
+[2022-10-15 12:40:45,116] {taskinstance.py:1089} INFO - 
+--------------------------------------------------------------------------------
+[2022-10-15 12:40:45,155] {taskinstance.py:1107} INFO - Executing <Task(PythonOperator): task_one> on 2022-10-13T00:00:00+00:00
+[2022-10-15 12:40:45,173] {standard_task_runner.py:52} INFO - Started process 106 to run task
+[2022-10-15 12:40:45,190] {standard_task_runner.py:76} INFO - Running: ['***', 'tasks', 'run', 'assignment', 'task_one', '2022-10-13T00:00:00+00:00', '--job-id', '40', '--pool', 'default_pool', '--raw', '--subdir', 'DAGS_FOLDER/assignment.py', '--cfg-path', '/tmp/tmpvs4ei76y', '--error-file', '/tmp/tmpixowi7_q']
+[2022-10-15 12:40:45,195] {standard_task_runner.py:77} INFO - Job 40: Subtask task_one
+[2022-10-15 12:40:45,309] {logging_mixin.py:104} INFO - Running <TaskInstance: assignment.task_one 2022-10-13T00:00:00+00:00 [running]> on host 444c7ff3fdda
+[2022-10-15 12:40:45,463] {taskinstance.py:1302} INFO - Exporting the following env vars:
+AIRFLOW_CTX_DAG_OWNER=***
+AIRFLOW_CTX_DAG_ID=assignment
+AIRFLOW_CTX_TASK_ID=task_one
+AIRFLOW_CTX_EXECUTION_DATE=2022-10-13T00:00:00+00:00
+AIRFLOW_CTX_DAG_RUN_ID=scheduled__2022-10-13T00:00:00+00:00
+[2022-10-15 12:40:45,479] {taskinstance.py:1501} ERROR - Task failed with exception
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.6/urllib/request.py", line 1349, in do_open
+    encode_chunked=req.has_header('Transfer-encoding'))
+  File "/usr/local/lib/python3.6/http/client.py", line 1291, in request
+    self._send_request(method, url, body, headers, encode_chunked)
+  File "/usr/local/lib/python3.6/http/client.py", line 1337, in _send_request
+    self.endheaders(body, encode_chunked=encode_chunked)
+  File "/usr/local/lib/python3.6/http/client.py", line 1286, in endheaders
+    self._send_output(message_body, encode_chunked=encode_chunked)
+  File "/usr/local/lib/python3.6/http/client.py", line 1046, in _send_output
+    self.send(msg)
+  File "/usr/local/lib/python3.6/http/client.py", line 984, in send
+    self.connect()
+  File "/usr/local/lib/python3.6/http/client.py", line 956, in connect
+    (self.host,self.port), self.timeout, self.source_address)
+  File "/usr/local/lib/python3.6/socket.py", line 704, in create_connection
+    for res in getaddrinfo(host, port, 0, SOCK_STREAM):
+  File "/usr/local/lib/python3.6/socket.py", line 745, in getaddrinfo
+    for res in _socket.getaddrinfo(host, port, family, type, proto, flags):
+socket.gaierror: [Errno -2] Name or service not known
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/airflow/.local/lib/python3.6/site-packages/airflow/models/taskinstance.py", line 1157, in _run_raw_task
+    self._prepare_and_execute_task_with_callbacks(context, task)
+  File "/home/airflow/.local/lib/python3.6/site-packages/airflow/models/taskinstance.py", line 1331, in _prepare_and_execute_task_with_callbacks
+    result = self._execute_task(context, task_copy)
+  File "/home/airflow/.local/lib/python3.6/site-packages/airflow/models/taskinstance.py", line 1361, in _execute_task
+    result = task_copy.execute(context=context)
+  File "/home/airflow/.local/lib/python3.6/site-packages/airflow/operators/python.py", line 150, in execute
+    return_value = self.execute_callable()
+  File "/home/airflow/.local/lib/python3.6/site-packages/airflow/operators/python.py", line 161, in execute_callable
+    return self.python_callable(*self.op_args, **self.op_kwargs)
+  File "/opt/airflow/dags/assignment.py", line 76, in catalog
+    data = pull(url)
+  File "/opt/airflow/dags/assignment.py", line 17, in pull
+    response = urllib.request.urlopen(url).read()
+  File "/usr/local/lib/python3.6/urllib/request.py", line 223, in urlopen
+    return opener.open(url, data, timeout)
+  File "/usr/local/lib/python3.6/urllib/request.py", line 526, in open
+    response = self._open(req, data)
+  File "/usr/local/lib/python3.6/urllib/request.py", line 544, in _open
+    '_open', req)
+  File "/usr/local/lib/python3.6/urllib/request.py", line 504, in _call_chain
+    result = func(*args)
+  File "/usr/local/lib/python3.6/urllib/request.py", line 1377, in http_open
+    return self.do_open(http.client.HTTPConnection, req)
+  File "/usr/local/lib/python3.6/urllib/request.py", line 1351, in do_open
+    raise URLError(err)
+urllib.error.URLError: <urlopen error [Errno -2] Name or service not known>
+[2022-10-15 12:40:45,499] {taskinstance.py:1551} INFO - Marking task as FAILED. dag_id=assignment, task_id=task_one, execution_date=20221013T000000, start_date=20221015T124045, end_date=20221015T124045
+[2022-10-15 12:40:45,568] {local_task_job.py:151} INFO - Task exited with return code 1
