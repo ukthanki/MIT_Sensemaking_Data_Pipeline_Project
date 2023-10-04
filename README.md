@@ -104,8 +104,16 @@ def catalog():
 
 ```
 
-I saw this as an opportunity to be more efficient with my code by creating a function that does this for all of the required tabs in the Excel spreadsheet, as shown below:
+Having collected the unstructured data in several, separate files, we now had to combine them into a sinlge file with the *combine()* function, as shown below:
 
+```python
+def combine():
+    with open('combo.txt', 'w') as outfile:
+       for file in glob.glob("*.html"):
+           with open(file) as infile:
+               outfile.write(infile.read())
+
+```
 
 
 The function is then used in the code below to efficiently output a single Data Frame with all of the data:
