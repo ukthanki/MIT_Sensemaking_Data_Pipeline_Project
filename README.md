@@ -27,32 +27,86 @@ Up to this point in the course, we had learned the following topics:
 16. DASK
 17. JavaScript
 
-In this project, we used the various skills we have learned to pull unstructured data from the MIT course catalog, clean and analyze the data to determine the word counts throughout all of the course names, and display a visual analysis in a D3 web application.
+In this project, we used the various skills we have learned to pull unstructured data from the MIT course catalog, clean and analyze the data to determine the word counts throughout all of the course names, and display a visual analysis in a D3 web application. The project was presented in a way that a majority of the base code was already provided to us and we had to fill in various sections with code.
 
-We first started by studying the data in question and its structure so that we can assess how to load it into a Data Frame. Since we were looking at a wide range of years, each year was a separate tab in the raw Excel spreadsheet. In order to analyze the data effectively, we had to compile all of the relevant data into a single Data Frame. The project was presented in a way that a majority of the base code was already provided to us and we had to fill in various sections with code.
+We started in the *assignment.py* file as this was the file that would be used by Airflow. Our fist objective was to define a function called *catalog()* that would be responsible for extracting and storing the unstructured data from a series of URLs into files - one for each course catalog URL. I updated the provided pseudocode to generate the following function:
 
-We started in the *assignment.py* file as this was the file that would be used by Airflow. Our fist objective was to define a function called 
+```python
+def catalog():
+
+    def pull(url):
+        response = urllib.request.urlopen(url).read()
+        data = response.decode('utf-8')
+        return data
+         
+    def store(data,file):
+        f = open(file,"w+")
+        f.write(data)
+        f.close()
+        print('wrote file: ' + file)
+
+    urls = ['http://student.mit.edu/catalog/m1a.html',
+            'http://student.mit.edu/catalog/m1b.html',
+            'http://student.mit.edu/catalog/m1c.html',
+            'http://student.mit.edu/catalog/m2a.html',
+            'http://student.mit.edu/catalog/m2b.html',
+            'http://student.mit.edu/catalog/m2c.html',
+            'http://student.mit.edu/catalog/m3a.html',
+            'http://student.mit.edu/catalog/m3b.html',
+            'http://student.mit.edu/catalog/m4a.html',
+            'http://student.mit.edu/catalog/m4b.html',
+            'http://student.mit.edu/catalog/m4c.html',
+            'http://student.mit.edu/catalog/m4d.html',
+            'http://student.mit.edu/catalog/m4e.html',
+            'http://student.mit.edu/catalog/m4f.html',
+            'http://student.mit.edu/catalog/m4g.html',
+            'http://student.mit.edu/catalog/m5a.html',
+            'http://student.mit.edu/catalog/m5b.html',
+            'http://student.mit.edu/catalog/m6a.html',
+            'http://student.mit.edu/catalog/m6b.html',
+            'http://student.mit.edu/catalog/m6c.html',
+            'http://student.mit.edu/catalog/m7a.html',
+            'http://student.mit.edu/catalog/m8a.html',
+            'http://student.mit.edu/catalog/m8b.html',
+            'http://student.mit.edu/catalog/m9a.html',
+            'http://student.mit.edu/catalog/m9b.html',
+            'http://student.mit.edu/catalog/m10a.html',
+            'http://student.mit.edu/catalog/m10b.html',
+            'http://student.mit.edu/catalog/m11a.html',
+            'http://student.mit.edu/catalog/m11b.html',
+            'http://student.mit.edu/catalog/m11c.html',
+            'http://student.mit.edu/catalog/m12a.html',
+            'http://student.mit.edu/catalog/m12b.html',
+            'http://student.mit.edu/catalog/m12c.html',
+            'http://student.mit.edu/catalog/m14a.html',
+            'http://student.mit.edu/catalog/m14b.html',
+            'http://student.mit.edu/catalog/m15a.html',
+            'http://student.mit.edu/catalog/m15b.html',
+            'http://student.mit.edu/catalog/m15c.html',
+            'http://student.mit.edu/catalog/m16a.html',
+            'http://student.mit.edu/catalog/m16b.html',
+            'http://student.mit.edu/catalog/m18a.html',
+            'http://student.mit.edu/catalog/m18b.html',
+            'http://student.mit.edu/catalog/m20a.html',
+            'http://student.mit.edu/catalog/m22a.html',
+            'http://student.mit.edu/catalog/m22b.html',
+            'http://student.mit.edu/catalog/m22c.html']
+
+    for url in urls:
+        index = url.rfind('/') + 1
+        data = pull(url)
+        file = url[index:]
+        store(data,file)
+
+        print('pulled: ' + file)
+        print('--- waiting ---')
+        time.sleep(15)
+
+```
 
 I saw this as an opportunity to be more efficient with my code by creating a function that does this for all of the required tabs in the Excel spreadsheet, as shown below:
 
-```python
-def add_dataframe(list_of_df, year):
-    """Appends a DataFrame to a list that corresponds to the year of a specific sheet of the MRTS Sales Data."""
-    df = pd.read_excel("mrtssales92-present.xls", sheet_name=year, skiprows=4, nrows=67)
-    df.drop(["Unnamed: 0", "TOTAL"], axis=1, inplace=True)
-    df.rename({"Unnamed: 1" : "Kind of Business"}, axis=1, inplace=True)
-    df_trans = df.melt(id_vars="Kind of Business",value_vars=df.columns[1:])
-    df_trans.replace("(S)", "0", inplace=True)
-    df_trans.replace("(NA)", "0", inplace=True)
-    df_trans.dropna(axis=0, inplace=True)
-    df_trans["Period"] = "01 " + df_trans["variable"]
-    df_trans["value"] = df_trans["value"].astype(float)
-    df_trans = df_trans.astype({"Period" : "datetime64[ns]"})
-    df_trans.drop("variable", axis=1, inplace=True)
-    
-    list_of_df.append(df_trans)
 
-```
 
 The function is then used in the code below to efficiently output a single Data Frame with all of the data:
 
