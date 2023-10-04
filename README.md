@@ -14,21 +14,24 @@ Up to this point in the course, we had learned the following topics:
 3. SQL
 4. Linear Regression
 5. ETL Fundamentals
+6. Flask
+7. Java
+8. CDC Fundamentals
+9. Docker
+10. Maven
+11. NiFi
+12. Hadoop
+13. PySpark
+14. Airflow
+15. Advanced Probability
+16. DASK
+17. JavaScript
 
-In this project, we explored the Monthly Retail Trade Survey (MRTS) data set for the years 1992-2020 and perform an Extract-Transformation-Load (ETL) process through a variety of steps. This involved processing the data in Python, programmatically creating a MySQL database and table, loading the data into the table, and then using Python to query from the database and analyze it for trends, percentage changes, as well as rolling time windows paired with visualization for enhanced understanding of the data.
+In this project, we used the various skills we have learned to pull unstructured data from the MIT course catalog, clean and analyze the data to determine the word counts throughout all of the course names, and display a visual analysis in a D3 web application.
 
-You can learn more about MRTS [here](https://www.census.gov/retail/about_the_surveys.html).
+We first started by studying the data in question and its structure so that we can assess how to load it into a Data Frame. Since we were looking at a wide range of years, each year was a separate tab in the raw Excel spreadsheet. In order to analyze the data effectively, we had to compile all of the relevant data into a single Data Frame. The project was presented in a way that a majority of the base code was already provided to us and we had to fill in various sections with code.
 
-We first started by studying the data in question and its structure so that we can assess how to load it into a Data Frame. Since we were looking at a wide range of years, each year was a separate tab in the raw Excel spreadsheet. In order to analyze the data effectively, we had to compile all of the relevant data into a single Data Frame.
-
-The data had a similar structure in each tab and it was determined that the following cleaning process could be used repeatedly for each year's MRTS data:
-- Reading the sheet into a Data Frame, skipping the first 4 and reading the next 67 rows
-- Dropping the first Unnamed column
-- Renaming the second Unnamed column to "Kind of Business"
-- Transposing the Data Frame
-- Replacing all "(S)" and "(NA)" entries with "0"
-- Removing NaN rows
-- Adding a DateTime column and converting the numeric values to Floats
+We started in the *assignment.py* file as this was the file that would be used by Airflow. Our fist objective was to define a function called 
 
 I saw this as an opportunity to be more efficient with my code by creating a function that does this for all of the required tabs in the Excel spreadsheet, as shown below:
 
