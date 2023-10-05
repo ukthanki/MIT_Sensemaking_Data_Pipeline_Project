@@ -189,36 +189,20 @@ We were now able to transition into the execution of the code which required the
 |:--:| 
 | **Figure 1.** Successful Airflow tasks. |
 
-I was then able to execute various SELECT statements through Python to visualize the data to gain various insights. For example, by executing the following code below, I was able to plot the data using Matplotlib, as shown below in Figure 2:
+The data from the JSON file that was generated had to be transferred to a .js file so that we could visualize the data. A snippet of the file is shown below in Figure 2:
 
-```python
-# (5) Retail and food services sales, total Yearly Trend
-query5 = """
-SELECT SUM(`value`), YEAR(period) FROM mrts WHERE kind_of_business = 'Retail and food services sales, total'
-GROUP BY 2 ORDER BY period
-"""
-MyCursor.execute(query5)
-month = []
-sales = []
-for row in MyCursor.fetchall():
-    sales.append(row[0])
-    month.append(row[1])
-    
-plt.plot(month, sales)
-plt.title("Retail and food services sales, total - Yearly")
-plt.xlabel("Year")
-plt.ylabel("Sales (USD, Million)")
-plt.show()
-```
 
-| ![download](https://github.com/ukthanki/MIT_MRTS_ETL/assets/42117481/0ee68c9d-b29c-4251-b37e-93067cfae930)| 
+
+| ![image](https://github.com/ukthanki/MIT_Sensemaking_Data_Pipeline_Project/assets/42117481/7475daf4-48e9-4bdb-aa36-b183d4f83807)| 
 |:--:| 
-| **Figure 2.** Sales vs. Year for Retail and Food Services. |
+| **Figure 2.** Word frequencies in a JavaScript file. |
 
-This project was quite insightful because it focused heavily on ETL and how it may be done programmatically as opposed to manually. I could have produced the same plots by performing all steps in Python only, but by loading the data in MySQL, it became available to a wider audience for querying and analysis; this represents a real-world situation as a result because data must be accessible easily by multiple entities.
+Finally, we used the code provided to us in the *d3_bubble_chart_example.html* file to display a visualization reflecting the word frequencies using the D3 Library. The more frequent a word was used, the bigger the bubble, as shown below in Figure 3:
 
-**You can view the full Project in the "module_8.py" and "Module 8_Umang_Thanki.ipynb" files in the Repository.**
+| ![Untitled](https://github.com/ukthanki/MIT_Sensemaking_Data_Pipeline_Project/assets/42117481/deb77ce6-7517-428d-9715-ee589c895944)| 
+|:--:| 
+| **Figure 3.** Word frequencies visualization. |
 
-[Go to Repo](https://github.com/ukthanki/MIT_Sensemaking_Data_Pipeline_Project)
+This project was quite interesting as it allowed us to use Airflow as well as JavaScript, a language I had never used before. The ned result was visually pleasing and illustrated that as data engineers, we may need to deal with both structured and unstructured data.
 
-In this project, we extract unstructured date from the MIT Course Catalog, clean and process the data, and visualize it in a D3 Web Application.
+**You can view the full Project in the Repository.**
