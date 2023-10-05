@@ -60,7 +60,7 @@ def catalog():
 
 ```
 
-Having collected the unstructured data in several, separate files, we now had to combine them into a sinlge file with the *combine()* function, as shown below:
+Having collected the unstructured data in several, separate files, we now had to combine them into a single file with the *combine()* function, as shown below:
 
 ```python
 def combine():
@@ -144,11 +144,50 @@ def count_words():
 
 ```
 
-As a result, the data was effectively loaded into the database table, as shown below in Figure 1:
+With our functions in place, we defined the Directed Acyclic Graph (DAG) by creating six tasks, with the first being a *pip install* command, and the remaining being the five functions defined earlier. My final code for this step is shown below:
 
-| ![download](https://github.com/ukthanki/MIT_MRTS_ETL/assets/42117481/ae5ff829-5165-419a-aa87-0663c492c8b0)| 
+```python
+with DAG(
+   "assignment",
+   start_date=days_ago(1),
+   schedule_interval="@daily",catchup=False,
+) as dag:
+# INSTALL BS4 BY HAND THEN CALL FUNCTION
+   # ts are tasks
+   t0 = BashOperator(
+       task_id='task_zero',
+       bash_command='pip install beautifulsoup4',
+       retries=2)
+   t1 = PythonOperator(
+       task_id='task_one',
+       depends_on_past=False,
+       python_callable=catalog)
+   t2 = PythonOperator(
+       task_id='task_two',
+       depends_on_past=False,
+       python_callable=combine)
+   t3 = PythonOperator(
+       task_id='task_three',
+       depends_on_past=False,
+       python_callable=titles)
+   t4 = PythonOperator(
+       task_id='task_four',
+       depends_on_past=False,
+       python_callable=clean)
+   t5 = PythonOperator(
+       task_id='task_five',
+       depends_on_past=False,
+       python_callable=count_words)
+
+   t0 >> t1 >> t2 >> t3 >> t4 >> t5
+
+```
+
+We were now able to transition into the execution of the code which required the *assignment.py* file to be placed in the /dags folder so that Airflow would pick it up and load the tasks defined earlier as a DAG. We then initiated our Airflow container in Docker and navigated to http://localhost:8080/ to access our Airflow session. I then manually ran each task in Airflow, and each task succeeded, as shown below in Figure 1:
+
+| ![image](https://github.com/ukthanki/MIT_Sensemaking_Data_Pipeline_Project/assets/42117481/d825bbf9-ee9b-4eab-b399-5f0e251149aa)| 
 |:--:| 
-| **Figure 1.** MRTS data loaded into the *mrts* table in MySQL. |
+| **Figure 1.** Successful Airflow tasks. |
 
 I was then able to execute various SELECT statements through Python to visualize the data to gain various insights. For example, by executing the following code below, I was able to plot the data using Matplotlib, as shown below in Figure 2:
 
